@@ -2,18 +2,41 @@ package tol.si
 
 import com.trustwallet.core.CoinType
 import com.trustwallet.core.HDWallet
+import com.trustwallet.core.WalletCoreLibLoader
 
 fun main() {
-    System.loadLibrary("TrustWalletCore")
+    WalletCoreLibLoader.loadLibrary()
 
-    val wallet = HDWallet("", "")
-    println("Mnemonic: \n${wallet.mnemonic}")
+    val mnemonics = emptyList<String>()
 
-    // Ethereum example
-    val coinEth: CoinType = CoinType.Ethereum
-    // Get the default address
-    val addressEth = wallet.getAddressForCoin(coinEth)
-    println("Default ETH address: \n$addressEth")
+    mnemonics.forEach { mnemonic ->
+        println("Mnemonic: $mnemonic")
+        try {
+            val wallet = HDWallet(mnemonic, "")
+            println("Mnemonic: \n${wallet.mnemonic}")
+
+            // Ethereum example
+            val coinEth: CoinType = CoinType.Ethereum
+            // Get the default address
+            val addressEth = wallet.getAddressForCoin(coinEth)
+            println("Default ETH address: \n$addressEth")
+
+            // Bitcoin example
+            val coinBtc: CoinType = CoinType.Bitcoin
+            // Get the default address
+            val addressBtc = wallet.getAddressForCoin(coinBtc)
+            println("Default BTC address: \n$addressBtc")
+
+            // Bitcoin example
+            val coinPoly: CoinType = CoinType.Polygon
+            // Get the default address
+            val addressPoly = wallet.getAddressForCoin(coinPoly)
+            println("Default Poly address: \n$addressPoly")
+        } catch (e: Exception) {
+            println("Error: ${e.message} for mnemonic: ${mnemonic}, skip...")
+            e.printStackTrace()
+        }
+    }
 
 //    // Signing a transaction (using EthereumSigner)
 //    val secretPrivateKey = wallet.getKeyForCoin(coinEth)
@@ -34,11 +57,6 @@ fun main() {
 //    val signerOutput = AnySigner.sign(signerInput, CoinType.ETHEREUM, Ethereum.SigningOutput.parser())
 //    println("Signed transaction: \n${signerOutput.encoded.toByteArray().toHexString(false)}")
 
-    // Bitcoin example
-    val coinBtc: CoinType = CoinType.Bitcoin
-    // Get the default address
-    val addressBtc = wallet.getAddressForCoin(coinBtc)
-    println("Default BTC address: \n$addressBtc")
 
     // Build a transaction
 //    val utxoTxId = "050d00e2e18ef13969606f1ceee290d3f49bd940684ce39898159352952b8ce2".hexStringToByteArray();
